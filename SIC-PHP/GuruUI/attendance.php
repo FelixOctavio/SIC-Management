@@ -50,13 +50,6 @@ if ($_SESSION['role'] != "guru") {
          $sesi = $_POST['sesi-dropdown'];
          $status = $_POST['status-dropdown'];
 
-
-         $querySiswa = mysqli_query($koneksi, "SELECT IDSiswa FROM datasiswa WHERE Nama='$nama'") or die(mysqli_error($koneksi));
-
-         while ($data = mysqli_fetch_array($querySiswa)) { //Hasil output querynya masih berupa object, jadi harus difetch
-            $idSiswa = ($data['IDSiswa']);
-         }
-
          $queryMapel = mysqli_query($koneksi, "SELECT IDMapel FROM mapel WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND NamaMapel='$mapel'") or die(mysqli_error($koneksi));
 
          while ($data = mysqli_fetch_array($queryMapel)) { //Hasil output querynya masih berupa object, jadi harus difetch
