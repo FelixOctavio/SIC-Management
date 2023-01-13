@@ -56,6 +56,8 @@ if ($_SESSION['role'] != "guru") {
             $idMapel = ($data['IDMapel']);
          }
 
+         $cancel = 0;
+
          $check = mysqli_query($koneksi, "SELECT IDSiswa, IDMapel, IDSesi, Semester, Tahun FROM kehadiran
          WHERE IDSiswa='$nama' AND IDMapel='$idMapel' AND IDSesi='$sesi' AND Semester='$semester' AND Tahun='$tahun'") or die(mysqli_error($koneksi));
          while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel

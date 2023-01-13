@@ -53,6 +53,8 @@ if ($_SESSION['role'] != "admin") {
             $tempatLahir = $_POST['TempatLahir'];
             $tanggalLahir = $_POST['TanggalLahir'];
 
+            $cancel = 0;
+
             $check = mysqli_query($koneksi, "SELECT Nama, NomorTelepon, Alamat, TempatLahir, TanggalLahir FROM dataguru WHERE Nama='$nama' AND NomorTelepon='$noTelp' AND Alamat='$alamat' AND TempatLahir='$tempatLahir' AND TanggalLahir='$tanggalLahir'") or die(mysqli_error($koneksi));
             while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
                 echo "<script>alert('Terdapat duplikat data!');</script>";

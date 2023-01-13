@@ -66,6 +66,8 @@ if ($_SESSION['role'] != "admin") {
                 $idKelas = ($data['IDKelas']);
             }
 
+            $cancel = 0;
+
             $check = mysqli_query($koneksi, "SELECT * FROM sesimapel
             WHERE IDSesi='$sesi' AND IDMapel='$mapel' AND IDKelas='$idKelas' AND Semester='$semester' AND Tahun='$tahun' AND IDGuru='$guru' AND IDRuangan='$ruangan' AND NamaSesi='$nama' AND Tanggal='$tanggal' AND JamMulai='$mulai' AND JamBerakhir='$selesai'") or die(mysqli_error($koneksi));
             while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
