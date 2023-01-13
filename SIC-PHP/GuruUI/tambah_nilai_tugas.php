@@ -51,20 +51,17 @@ if ($_SESSION['role'] != "guru") {
          $tugas = $_POST['tugas'];
          $nilai = $_POST['nilai'];
 
-         $querySiswa = mysqli_query($koneksi, "SELECT IDSiswa FROM datasiswa WHERE Nama='$nama'") or die(mysqli_error($koneksi));
-
-         while ($data = mysqli_fetch_array($querySiswa)) { //Hasil output querynya masih berupa object, jadi harus difetch
-            $idSiswa = ($data['IDSiswa']);
-         }
-
          $queryMapel = mysqli_query($koneksi, "SELECT IDMapel FROM mapel WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND NamaMapel='$mapel'") or die(mysqli_error($koneksi));
 
          while ($data = mysqli_fetch_array($queryMapel)) { //Hasil output querynya masih berupa object, jadi harus difetch
             $idMapel = ($data['IDMapel']);
          }
 
+         $cancel = 0;
+         $query = 0;
+         
          $check = mysqli_query($koneksi, "SELECT IDTugas, IDMapel, IDSiswa, Semester, Tahun, NamaTugas FROM nilaitugas
-         WHERE IDTugas='$id_tugas' AND IDMapel='$idMapel' AND IDSiswa='$idSiswa' AND Semester='$semester' AND Tahun='$tahun' AND NamaTugas='$tugas'") or die(mysqli_error($koneksi));
+         WHERE IDTugas='$id_tugas' AND IDMapel='$idMapel' AND IDSiswa='$nama' AND Semester='$semester' AND Tahun='$tahun' AND NamaTugas='$tugas'") or die(mysqli_error($koneksi));
          while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
             echo "<script>alert('Terdapat duplikat data!');</script>";
             $cancel = 1;
@@ -72,13 +69,16 @@ if ($_SESSION['role'] != "guru") {
         }
 
          if (!($cancel)) {
+            try {
             $query = mysqli_query($koneksi, "INSERT INTO nilaitugas (IDTugas, IDMapel, IDSiswa, Semester, Tahun, NamaTugas, Nilai)
-            VALUES ('$id_tugas', '$idMapel', '$idSiswa', '$semester', '$tahun', '$tugas', '$nilai')") or die(mysqli_error($koneksi));
+            VALUES ('$id_tugas', '$idMapel', '$nama', '$semester', '$tahun', '$tugas', '$nilai')") or mysqli_error($koneksi);
+
+            } catch(Exception $e) {
+               echo "<script>alert('Terdapat duplikat data!');</script>";
+            }
 
             if ($query)
                echo "<script>alert('Nilai tugas berhasil ditambahkan');</script>";
-            else
-               echo "<script>alert('Gagal menambahkan nilai tugas siswa');</script>";
          }
       }
       ?>

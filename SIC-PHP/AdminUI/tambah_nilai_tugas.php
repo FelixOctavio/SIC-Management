@@ -10,7 +10,7 @@ if ($_SESSION['role'] != "guru") {
 
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-   <title>Tambah Nilai Ulangan</title>
+   <title>Tambah Nilai Tugas</title>
    <link href="style.css" type="text/css" rel="stylesheet">
    <link rel="icon" href="../logo.png">
 </head>
@@ -20,10 +20,10 @@ if ($_SESSION['role'] != "guru") {
       <nav class="navbar">
          <ul>
             <li>
-               <a href="tambah_nilai_ulangan.php#" class="active">Memasukkan Nilai Ulangan</a>
+               <a href="tambah_nilai_ulangan.php">Memasukkan Nilai Ulangan</a>
             </li>
             <li>
-               <a href="tambah_nilai_tugas.php">Memasukkan Nilai Tugas</a>
+               <a href="tambah_nilai_tugas.php#" class="active">Memasukkan Nilai Tugas</a>
             </li>
             <li>
                <a href="attendance.php">Kehadiran</a>
@@ -36,33 +36,30 @@ if ($_SESSION['role'] != "guru") {
    </header>
    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
       <?php
-      if (!(empty($_POST["idulangan"]) || empty($_POST["nama-dropdown"]) || empty($_POST["jurusan-dropdown"]) || empty($_POST["tingkat-dropdown"]) || empty($_POST["semester-dropdown"]) || empty($_POST["mapel-dropdown"]) || empty($_POST["tipe-dropdown"]) || empty($_POST["ulangan"]) || empty($_POST["nilai"]))) {
+      if (!(empty($_POST["idtugas"]) || empty($_POST["nama-dropdown"]) || empty($_POST["jurusan-dropdown"]) || empty($_POST["tingkat-dropdown"]) || empty($_POST["semester-dropdown"]) || empty($_POST["mapel-dropdown"]) || empty($_POST["tugas"]) || empty($_POST["nilai"]))) {
          ?>
          <?php
          include "../Connection.php";
 
-         $id_ulangan = $_POST['idulangan'];
+         $id_tugas = $_POST['idtugas'];
          $nama = $_POST['nama-dropdown'];
          $jurusan = $_POST['jurusan-dropdown'];
          $tingkat = $_POST['tingkat-dropdown'];
          $tahun = $_POST['tahun-dropdown'];
          $semester = $_POST['semester-dropdown'];
          $mapel = $_POST['mapel-dropdown'];
-         $tipe = $_POST['tipe-dropdown'];
-         $ulangan = $_POST['ulangan'];
+         $tugas = $_POST['tugas'];
          $nilai = $_POST['nilai'];
 
-         $queryMapel = mysqli_query($koneksi, "SELECT IDMapel FROM mapel WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND NamaMapel='$mapel' ") or die(mysqli_error($koneksi));
+         $queryMapel = mysqli_query($koneksi, "SELECT IDMapel FROM mapel WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND NamaMapel='$mapel'") or die(mysqli_error($koneksi));
 
          while ($data = mysqli_fetch_array($queryMapel)) { //Hasil output querynya masih berupa object, jadi harus difetch
             $idMapel = ($data['IDMapel']);
          }
 
          $cancel = 0;
-         $query = 0;
-
-         $check = mysqli_query($koneksi, "SELECT IDUlangan, IDMapel, IDSiswa, Semester, Tahun, TipeUlangan, NamaUlangan FROM nilaiulangan
-         WHERE IDUlangan='$id_ulangan' AND IDMapel='$idMapel' AND IDSiswa='$nama' AND Semester='$semester' AND Tahun='$tahun'AND TipeUlangan='$tipe' AND NamaUlangan='$ulangan'") or die(mysqli_error($koneksi));
+         $check = mysqli_query($koneksi, "SELECT IDTugas, IDMapel, IDSiswa, Semester, Tahun, NamaTugas FROM nilaitugas
+         WHERE IDTugas='$id_tugas' AND IDMapel='$idMapel' AND IDSiswa='$nama' AND Semester='$semester' AND Tahun='$tahun' AND NamaTugas='$tugas'") or die(mysqli_error($koneksi));
          while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
             echo "<script>alert('Terdapat duplikat data!');</script>";
             $cancel = 1;
@@ -70,16 +67,14 @@ if ($_SESSION['role'] != "guru") {
         }
 
          if (!($cancel)) {
-            try {
-               $query = mysqli_query($koneksi, "INSERT INTO nilaiulangan (IDUlangan, IDMapel, IDSiswa, Semester, Tahun, TipeUlangan, NamaUlangan, Nilai)
-               VALUES ('$id_ulangan', '$idMapel', '$nama', '$semester', '$tahun', '$tipe', '$ulangan', '$nilai')") or die(mysqli_error($koneksi));
-            } catch(Exception $e) {
-               echo "<script>alert('Terdapat duplikat data!');</script>";
-            }
+            $query = mysqli_query($koneksi, "INSERT INTO nilaitugas (IDTugas, IDMapel, IDSiswa, Semester, Tahun, NamaTugas, Nilai)
+            VALUES ('$id_tugas', '$idMapel', '$nama', '$semester', '$tahun', '$tugas', '$nilai')") or die(mysqli_error($koneksi));
 
             if ($query)
-               echo "<script>alert('Nilai ulangan berhasil ditambahkan');</script>";
-         }     
+               echo "<script>alert('Nilai tugas berhasil ditambahkan');</script>";
+            else
+               echo "<script>alert('Gagal menambahkan nilai tugas siswa');</script>";
+         }
       }
       ?>
 
@@ -89,13 +84,13 @@ if ($_SESSION['role'] != "guru") {
 
       <isi>
          <?php
-         $idulanganErr = $namaErr = $jurusanErr = $tahunErr = $semesterErr = $mapelErr = $tipeErr = $ulanganErr = $nilaiErr = $tingkatErr = $kelasErr = $ulanganErr = "";
-         $idulangan = $nama = $jurusan = $tahun = $semester = $mapel = $tipe = $ulangan = $nilai = $tingkat = $kelas = $ulanganErr = "";
+         $idTugasErr = $namaErr = $jurusanErr = $tahunErr = $semesterErr = $mapelErr = $tugasErr = $nilaiErr = $tingkatErr = $kelasErr = "";
+         $idTugas = $nama = $jurusan = $tahun = $semester = $mapel = $tugas = $nilai = $tingkat = $kelas = "";
          if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (empty($_POST["idulangan"])) {
-               $idulanganErr = "Ulangan ke tidak boleh kosong";
+            if (empty($_POST["idtugas"])) {
+               $idTugasErr = "Tugas ke tidak boleh kosong";
             } else {
-               $idulangan = test_input($_POST["idulangan"]);
+               $idTugas = test_input($_POST["idtugas"]);
             }
 
             if (empty($_POST["nama-dropdown"])) {
@@ -134,16 +129,10 @@ if ($_SESSION['role'] != "guru") {
                $mapel = test_input($_POST["mapel-dropdown"]);
             }
 
-            if (empty($_POST["tipe-dropdown"])) {
-               $tipeErr = "Tipe tidak boleh kosong";
+            if (empty($_POST["tugas"])) {
+               $tugasErr = "Tugas tidak boleh kosong";
             } else {
-               $tipe = test_input($_POST["tipe-dropdown"]);
-            }
-
-            if (empty($_POST["ulangan"])) {
-               $ulanganErr = "Ulangan tidak boleh kosong";
-            } else {
-               $ulangan = test_input($_POST["ulangan"]);
+               $tugas = test_input($_POST["tugas"]);
             }
 
             if (empty($_POST["nilai"])) {
@@ -530,38 +519,18 @@ if ($_SESSION['role'] != "guru") {
             </script>
 
             <tr>
-               <td>Tipe Ulangan</td>
+               <td>Tugas ke</td>
                <td>:</td>
-               <td>
-                  <select name="tipe-dropdown" id="tipe-dropdown">
-                     <option disabled <?php if ($tipe == "")
-                        echo "selected" ?>> Pilih Tipe Ulangan </option>
-                        <option value="Ulangan" <?php if ($tipe == "Ulangan")
-                        echo "selected" ?>>Ulangan</option>
-                        <option value="UTS" <?php if ($tipe == "UTS")
-                        echo "selected" ?>>UTS</option>
-                        <option value="UAS" <?php if ($tipe == "UAS")
-                        echo "selected" ?>>UAS</option>
-                     </select>
-                     <span class="error">
-                     <?php echo $tipeErr; ?>
-                  </span>
-               </td>
-            </tr>
-
-            <tr>
-               <td>Ulangan ke</td>
-               <td>:</td>
-               <td><input type="number" min="1" name="idulangan" value="<?php echo $idulangan; ?>"> <span class="error">
-                     <?php echo $idulanganErr; ?>
+               <td><input type="number" min="1" name="idtugas" value="<?php echo $idTugas; ?>"> <span class="error">
+                     <?php echo $idTugasErr; ?>
                   </span></td>
             </tr>
 
             <tr>
-               <td>Nama Ulangan</td>
+               <td>Nama Tugas</td>
                <td>:</td>
-               <td><input type="text" name="ulangan" value="<?php echo $ulangan; ?>"><span class="error">
-                     <?php echo $ulanganErr; ?>
+               <td><input type="text" name="tugas" value="<?php echo $tugas; ?>"><span class="error">
+                     <?php echo $tugasErr; ?>
                   </span> </td>
             </tr>
 

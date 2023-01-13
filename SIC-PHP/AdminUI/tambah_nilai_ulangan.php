@@ -52,6 +52,8 @@ if ($_SESSION['role'] != "guru") {
          $ulangan = $_POST['ulangan'];
          $nilai = $_POST['nilai'];
 
+         $querySiswa = mysqli_query($koneksi, "SELECT IDSiswa FROM datasiswa WHERE Nama='$nama'") or die(mysqli_error($koneksi));
+
          $queryMapel = mysqli_query($koneksi, "SELECT IDMapel FROM mapel WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND NamaMapel='$mapel' ") or die(mysqli_error($koneksi));
 
          while ($data = mysqli_fetch_array($queryMapel)) { //Hasil output querynya masih berupa object, jadi harus difetch
@@ -59,8 +61,6 @@ if ($_SESSION['role'] != "guru") {
          }
 
          $cancel = 0;
-         $query = 0;
-
          $check = mysqli_query($koneksi, "SELECT IDUlangan, IDMapel, IDSiswa, Semester, Tahun, TipeUlangan, NamaUlangan FROM nilaiulangan
          WHERE IDUlangan='$id_ulangan' AND IDMapel='$idMapel' AND IDSiswa='$nama' AND Semester='$semester' AND Tahun='$tahun'AND TipeUlangan='$tipe' AND NamaUlangan='$ulangan'") or die(mysqli_error($koneksi));
          while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
@@ -70,16 +70,14 @@ if ($_SESSION['role'] != "guru") {
         }
 
          if (!($cancel)) {
-            try {
-               $query = mysqli_query($koneksi, "INSERT INTO nilaiulangan (IDUlangan, IDMapel, IDSiswa, Semester, Tahun, TipeUlangan, NamaUlangan, Nilai)
-               VALUES ('$id_ulangan', '$idMapel', '$nama', '$semester', '$tahun', '$tipe', '$ulangan', '$nilai')") or die(mysqli_error($koneksi));
-            } catch(Exception $e) {
-               echo "<script>alert('Terdapat duplikat data!');</script>";
-            }
+            $query = mysqli_query($koneksi, "INSERT INTO nilaiulangan (IDUlangan, IDMapel, IDSiswa, Semester, Tahun, TipeUlangan, NamaUlangan, Nilai)
+            VALUES ('$id_ulangan', '$idMapel', '$nama', '$semester', '$tahun', '$tipe', '$ulangan', '$nilai')") or die(mysqli_error($koneksi));
 
             if ($query)
                echo "<script>alert('Nilai ulangan berhasil ditambahkan');</script>";
-         }     
+            else
+               echo "<script>alert('Gagal menambahkan nilai ulangan siswa');</script>";
+         }
       }
       ?>
 
