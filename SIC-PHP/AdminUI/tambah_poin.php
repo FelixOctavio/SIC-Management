@@ -127,8 +127,7 @@ if ($_SESSION['role'] != "admin") {
                                 while ($data = mysqli_fetch_array($sql)) {
                                     ?>
                                     <option value="<?= $data['IDSiswa'] ?>" <?php if ($data['IDSiswa'] == "$nama")
-                                          echo "selected" ?>>
-                                        <?= $data['Nama'] ?>
+                                          echo "selected" ?>><?=$data['IDSiswa']?> - <?= $data['Nama'] ?>
                                     </option>
                                     <?php
                                 }

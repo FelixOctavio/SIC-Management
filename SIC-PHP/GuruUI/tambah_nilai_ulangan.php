@@ -537,6 +537,8 @@ if ($_SESSION['role'] != "guru") {
                   <select name="tipe-dropdown" id="tipe-dropdown">
                      <option disabled <?php if ($tipe == "")
                         echo "selected" ?>> Pilih Tipe Ulangan </option>
+                        <option value="Ulangan" <?php if ($tipe == "Ulangan")
+                        echo "selected" ?>>Ulangan</option>
                         <option value="UTS" <?php if ($tipe == "UTS")
                         echo "selected" ?>>UTS</option>
                         <option value="UAS" <?php if ($tipe == "UAS")

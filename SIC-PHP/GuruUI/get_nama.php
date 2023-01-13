@@ -16,7 +16,7 @@ if($_SESSION['role'] != "guru"){
     $semester_id = $_POST["semester_id"];
     $nama = $_POST["nama"];
 
-    $sql=mysqli_query($koneksi, "SELECT DISTINCT datasiswa.Nama
+    $sql=mysqli_query($koneksi, "SELECT DISTINCT datasiswa.Nama, datasiswa.IDSiswa
     FROM datasiswa
     JOIN listsiswa ON listsiswa.IDSiswa=datasiswa.IDSiswa
     JOIN kelas ON (listsiswa.IDKelas = kelas.IDKelas)
@@ -28,7 +28,7 @@ if($_SESSION['role'] != "guru"){
    while ($data=mysqli_fetch_array($sql)) {
 ?>
    <option value="<?=$data['Nama']?>" <?php if ($data['Nama'] == "$nama")
-          echo "selected" ?>><?=$data['Nama']?></option>
+          echo "selected" ?>><?=$data['IDSiswa']?> - <?=$data['Nama']?></option>
 <?php
    }
 ?>
