@@ -1,6 +1,6 @@
 @font-face { 
     font-family: 'REZ';
-    src: url('Font/REZ.ttf') format('truetype');
+    src: url('../Font/REZ.ttf') format('truetype');
     font-weight: normal;
 }
 
