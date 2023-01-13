@@ -1,18 +1,18 @@
 @font-face { 
     font-family: 'REZ';
-    src: url('Font/REZ.ttf') format('truetype');
+    src: url('../Font/REZ.ttf') format('truetype');
     font-weight: normal;
 }
 
 @font-face { 
     font-family: 'Gontserrat';
-    src: url('Font/Gontserrat-Regular.ttf') format('truetype');
+    src: url('../Font/Gontserrat-Regular.ttf') format('truetype');
     font-weight: normal;
 }
 
 @font-face { 
     font-family: 'Gontserrat Medium';
-    src: url('Font/Gontserrat-Medium.ttf') format('truetype');
+    src: url('../Font/Gontserrat-Medium.ttf') format('truetype');
     font-weight: normal;
 }
 
