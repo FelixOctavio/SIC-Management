@@ -49,19 +49,13 @@ if ($_SESSION['role'] != "admin") {
             $kelas = $_POST['kelas-dropdown'];
             $tahun = $_POST['tahunAjaran'];
 
-            $querySiswa = mysqli_query($koneksi, "SELECT IDSiswa FROM datasiswa WHERE Nama='$nama'") or die(mysqli_error($koneksi));
-
-            while ($data = mysqli_fetch_array($querySiswa)) { //Hasil output querynya masih berupa object, jadi harus difetch
-                $idSiswa = ($data['IDSiswa']);
-            }
-
             $queryKelas = mysqli_query($koneksi, "SELECT IDKelas FROM kelas WHERE Tingkat='$tingkat' AND Jurusan='$jurusan' AND KodeKelas='$kelas'") or die(mysqli_error($koneksi));
 
             while ($data = mysqli_fetch_array($queryKelas)) { //Hasil output querynya masih berupa object, jadi harus difetch
                 $idKelas = ($data['IDKelas']);
             }
 
-            $check = mysqli_query($koneksi, "SELECT * FROM listsiswa WHERE IDKelas='$idKelas' AND IDSiswa='$idSiswa' AND Tahun='$tahun'") or die(mysqli_error($koneksi));
+            $check = mysqli_query($koneksi, "SELECT * FROM listsiswa WHERE IDKelas='$idKelas' AND IDSiswa='$nama' AND Tahun='$tahun'") or die(mysqli_error($koneksi));
             while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
                 echo "<script>alert('Terdapat duplikat data!');</script>";
                 $cancel = 1;
@@ -70,7 +64,7 @@ if ($_SESSION['role'] != "admin") {
 
             if (!($cancel)) {
                 $query = mysqli_query($koneksi, "INSERT INTO listsiswa (IDKelas, IDSiswa, Tahun)
-                VALUES ('$idKelas', '$idSiswa', '$tahun')") or die(mysqli_error($koneksi));
+                VALUES ('$idKelas', '$nama', '$tahun')") or die(mysqli_error($koneksi));
 
                 if ($query)
                     echo "<script>alert('Assign siswa berhasil');</script>";
@@ -139,7 +133,7 @@ if ($_SESSION['role'] != "admin") {
                             $sql = mysqli_query($koneksi, "SELECT IDSiswa, Nama FROM datasiswa ORDER BY IDSiswa DESC;");
                             while ($data = mysqli_fetch_array($sql)) {
                                 ?>
-                                <option value="<?= $data['Nama'] ?>" <?php if ($data['Nama'] == "$nama")
+                                <option value="<?= $data['IDSiswa'] ?>" <?php if ($data['IDSiswa'] == "$nama")
                                       echo "selected" ?>>
                                     <?= $data['IDSiswa'] ?> - <?= $data['Nama'] ?>
                                 </option>
