@@ -78,9 +78,9 @@ if ($_SESSION['role'] != "admin") {
                 $query = mysqli_query($koneksi, "INSERT INTO sesimapel (IDSesi, IDMapel, IDKelas, Semester, Tahun, IDGuru, IDRuangan, NamaSesi, Tanggal, JamMulai, JamBerakhir)
             VALUES ('$sesi', '$mapel', '$idKelas', '$semester', '$tahun', '$guru', '$ruangan', '$nama', '$tanggal', '$mulai', '$selesai')") or die(mysqli_error($koneksi));
                 if ($query)
-                    echo "<script>alert('Nilai ulangan berhasil ditambahkan');</script>";
+                    echo "<script>alert('Sesi berhasil ditambahkan');</script>";
                 else
-                    echo "<script>alert('Gagal menambahkan nilai ulangan siswa');</script>";
+                    echo "<script>alert('Gagal menambahkan sesi');</script>";
             }
         }
         ?>
