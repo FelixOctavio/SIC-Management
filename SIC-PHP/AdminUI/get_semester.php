@@ -9,8 +9,8 @@ if ($_SESSION['role'] != "admin") {
 <?php
 include "../Conection.php";
 $tingkat_id = $_POST["tingkat_id"];
-$ganjil = $tingkat_id - 9 + $tingkat_id - 9 - 1;
-$genap = $tingkat_id - 9 + $tingkat_id - 9;
+$ganjil = ($tingkat_id - 9) * 2- 1;
+$genap = ($tingkat_id - 9) * 2;
 $semester = $_POST["semester"];
 
 ?>
