@@ -64,7 +64,7 @@ if ($_SESSION['role'] != "guru") {
          }
 
          $check = mysqli_query($koneksi, "SELECT IDSiswa, IDMapel, IDSesi, Semester, Tahun FROM kehadiran
-         WHERE IDSiswa='$idSiswa' AND IDMapel='$idMapel' AND IDSesi='$sesi' AND Semester='$semester' AND Tahun='$tahun'") or die(mysqli_error($koneksi));
+         WHERE IDSiswa='$nama' AND IDMapel='$idMapel' AND IDSesi='$sesi' AND Semester='$semester' AND Tahun='$tahun'") or die(mysqli_error($koneksi));
          while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
             echo "<script>alert('Terdapat duplikat data!');</script>";
             $cancel = 1;
@@ -73,7 +73,7 @@ if ($_SESSION['role'] != "guru") {
 
          if (!($cancel)) {
             $query = mysqli_query($koneksi, "INSERT INTO kehadiran (IDSiswa, IDMapel, IDSesi, Semester, Tahun, StatusKehadiran)
-            VALUES ('$idSiswa', '$idMapel', '$sesi', '$semester', '$tahun', '$status')") or die(mysqli_error($koneksi));
+            VALUES ('$nama', '$idMapel', '$sesi', '$semester', '$tahun', '$status')") or die(mysqli_error($koneksi));
 
             if ($query)
                echo "<script>alert('Absensi berhasil ditambahkan');</script>";
