@@ -63,6 +63,16 @@ if ($_SESSION['role'] != "admin") {
                 $IDPoin = ($data['IDPoin']) + 1;
             }
 
+            $cancel = 0;
+         $check = mysqli_query($koneksi, "SELECT * FROM poinsiswa
+         WHERE IDSiswa='$IDSiswa' AND JudulPoin='$JudulPoin' AND JumlahPoin='$JumlahPoin' AND Tanggal='$Tanggal'") or die(mysqli_error($koneksi));
+         while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
+            echo "<script>alert('Terdapat duplikat data!');</script>";
+            $cancel = 1;
+            break;
+        }
+
+        if (!($cancel)) {
             $query = mysqli_query($koneksi, "INSERT INTO poinsiswa (IDPoin, IDSiswa, JudulPoin, JumlahPoin, Tanggal)
             VALUES ('$IDPoin', '$IDSiswa', '$JudulPoin', '$JumlahPoin', '$Tanggal')") or die(mysqli_error($koneksi));
 
@@ -71,6 +81,7 @@ if ($_SESSION['role'] != "admin") {
             else
                 echo "<script>alert('Gagal menambahkan Poin siswa');</script>";
         }
+    }
         ?>
 
         <?php
