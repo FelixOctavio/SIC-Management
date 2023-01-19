@@ -451,7 +451,7 @@ if ($_SESSION['role'] != "admin") {
                 <tr>
                     <td>Tahun</td>
                     <td>:</td>
-                    <td><input type="number" min="<?php echo date("Y"); ?>" name="tahun" size="30"
+                    <td><input type="number" min="<?php echo date("Y")-1; ?>" name="tahun" size="30"
                             value="<?php echo $tahun; ?>"> <span class="error">
                             <?php echo $tahunErr; ?>
                         </span></td>
