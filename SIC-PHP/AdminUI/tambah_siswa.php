@@ -43,7 +43,7 @@ if ($_SESSION['role'] != "admin") {
 
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <?php
-        if (!(empty($_POST["Nama"]) || empty($_POST["NomorTelepon"]) || empty($_POST["Alamat"]) || empty($_POST["TempatLahir"]) || empty($_POST["TanggalLahir"]))) {
+        if (!(empty($_POST["Nama"]) || empty($_POST["NomorTelepon"]) || empty($_POST["Alamat"]) || empty($_POST["TempatLahir"]) || empty($_POST["TanggalLahir"]) || empty($_POST["NamaOrtu"]))) {
             ?>
             <?php
             include "../Connection.php";
@@ -53,8 +53,11 @@ if ($_SESSION['role'] != "admin") {
             $alamat = $_POST['Alamat'];
             $tempatLahir = $_POST['TempatLahir'];
             $tanggalLahir = $_POST['TanggalLahir'];
+            $namaOrtu = $_POST['NamaOrtu'];
 
-            $check = mysqli_query($koneksi, "SELECT Nama, NomorTelepon, Alamat, TempatLahir, TanggalLahir FROM datasiswa WHERE Nama='$nama' AND NomorTelepon='$noTelp' AND Alamat='$alamat' AND TempatLahir='$tempatLahir' AND TanggalLahir='$tanggalLahir'") or die(mysqli_error($koneksi));
+            $cancel = 0;
+
+            $check = mysqli_query($koneksi, "SELECT Nama, NomorTelepon, Alamat, TempatLahir, TanggalLahir, NamaOrtu FROM datasiswa WHERE Nama='$nama' AND NomorTelepon='$noTelp' AND Alamat='$alamat' AND TempatLahir='$tempatLahir' AND TanggalLahir='$tanggalLahir' AND NamaOrtu='$namaOrtu'") or die(mysqli_error($koneksi));
             while ($data = mysqli_fetch_array($check)) { //Kalo ketemu data yang sama di tabel
                 echo "<script>alert('Terdapat duplikat data!');</script>";
                 $cancel = 1;
@@ -69,8 +72,8 @@ if ($_SESSION['role'] != "admin") {
                     $idSiswa = ($data['IDSiswa']) + 1;
                 }
 
-                $query = mysqli_query($koneksi, "INSERT INTO datasiswa(IDSiswa, Nama, NomorTelepon, Alamat, TempatLahir, TanggalLahir)
-                VALUES ('$idSiswa', '$nama', '$noTelp', '$alamat', '$tempatLahir', '$tanggalLahir')") or die(mysqli_error($koneksi));
+                $query = mysqli_query($koneksi, "INSERT INTO datasiswa(IDSiswa, Nama, NomorTelepon, Alamat, TempatLahir, TanggalLahir, NamaOrtu)
+                VALUES ('$idSiswa', '$nama', '$noTelp', '$alamat', '$tempatLahir', '$tanggalLahir', '$namaOrtu')") or die(mysqli_error($koneksi));
 
                 $query = mysqli_query($koneksi, "INSERT INTO userlogin(IDUser, UserPassword, Role)
                 VALUES ('$idSiswa', MD5('password'), 'Siswa')") or die(mysqli_error($koneksi));
@@ -84,8 +87,8 @@ if ($_SESSION['role'] != "admin") {
         ?>
         <isi>
             <?php
-            $namaErr = $telpErr = $alamatErr = $tempatLahirErr = $tanggalLahirErr = "";
-            $nama = $telp = $alamat = $tempatLahir = $tanggalLahir = "";
+            $namaErr = $telpErr = $alamatErr = $tempatLahirErr = $tanggalLahirErr = $namaOrtuErr = "";
+            $nama = $telp = $alamat = $tempatLahir = $tanggalLahir = $namaOrtu = "";
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (empty($_POST["Nama"])) {
@@ -116,6 +119,12 @@ if ($_SESSION['role'] != "admin") {
                     $tanggalLahirErr = "Tanggal lahir tidak boleh kosong";
                 } else {
                     $tanggalLahir = test_input($_POST["TanggalLahir"]);
+                }
+
+                if (empty($_POST["NamaOrtu"])) {
+                    $namaOrtuErr = "Nama ortu tidak boleh kosong";
+                } else {
+                    $namaOrtu = test_input($_POST["Nama"]);
                 }
             }
 
@@ -169,6 +178,14 @@ if ($_SESSION['role'] != "admin") {
                     <td><input type="date" name="TanggalLahir" size="30" value="<?php echo $tanggalLahir; ?>"> <span
                             class="error">
                             <?php echo $tanggalLahirErr; ?>
+                        </span></td>
+                </tr>
+
+                <tr>
+                    <td>Nama Ortu</td>
+                    <td>:</td>
+                    <td><input type="text" name="NamaOrtu" size="30" value="<?php echo $namaOrtu; ?>"> <span class="error">
+                            <?php echo $namaOrtuErr; ?>
                         </span></td>
                 </tr>
 
